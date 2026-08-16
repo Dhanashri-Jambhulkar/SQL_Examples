@@ -22,3 +22,12 @@ select *,
 lag(temp,1,0) over (order by num asc) as prev_day_temp,
 lead(temp,1,0) over (order by num asc) as next_day_temp
 from Weather;
+
+-- Remove Duplicates 
+create view de_duplicate1 as
+select subquery.* from 
+(select *, row_number() over (partition by temp order by temp) as dedup
+from Weather) subquery
+where dedup = 1;
+
+select * from de_duplicate1
